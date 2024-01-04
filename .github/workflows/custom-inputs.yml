@@ -25,5 +25,5 @@ jobs:
 
       - uses: ./.github/actions/read-custom-input
         with:
-          ss-token: ${{ inputs.ss-token }}
+          custom-token: ${{ inputs.custom-token }}
           
