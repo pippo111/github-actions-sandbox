@@ -10,6 +10,7 @@ on:
 
 jobs:
   main-job:
+    environment: 'production'
     runs-on: ubuntu-latest
     steps:
       - name: Wait for the secret to proceed
