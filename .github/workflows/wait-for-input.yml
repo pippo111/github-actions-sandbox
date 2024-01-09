@@ -20,7 +20,7 @@ jobs:
 
           while true; do
             echo "Trying..."
-            approved=${{ secrets.APPROVAL_SECRET }}
+            approved=${{ vars.APPROVAL_TOKEN }}
             
             if [[ "${approved}" != "0" ]]; then
               break
