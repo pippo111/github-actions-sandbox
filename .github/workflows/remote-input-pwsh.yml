@@ -1,0 +1,41 @@
+name: Remote input test
+
+on:
+  workflow_dispatch:
+    inputs:
+      retries:
+        description: 'Number of retries.'
+        required: true
+        type: number
+
+jobs:
+  main-job:
+    runs-on: windows-latest
+    steps:
+      - name: Wait for the token to proceed
+        shell: pwsh
+        id: wait_for_secret
+        run: |
+          $trials = 0
+
+          while ($true) {
+            Write-Host "Trying..."
+            $approved = (Invoke-WebRequest -Uri "https://stb-api.ngrok.app/v1/integrations/token" -UseBasicParsing).Content
+        
+            Write-Host "Value: $approved"
+            
+            if ($approved -ne "0") {
+              break
+            }
+        
+            Start-Sleep -Seconds 10
+            $trials++
+        
+            if ($trials -ge ${{ inputs.retries }}) {
+              Write-Host "Limit reached for Approval. Exiting..."
+              Add-Content -Path $env:GITHUB_OUTPUT -Value "approval_status=not-approved"
+              exit 1
+            }
+          }
+          
+          Add-Content -Path $env:GITHUB_OUTPUT -Value "approval_status=approved"

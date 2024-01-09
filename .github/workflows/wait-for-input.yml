@@ -21,6 +21,7 @@ jobs:
 
           while true; do
             echo "Trying..."
+            # Won't work, because vars are read at the beginning and changing them later on will not affect current var
             approved=${{ vars.APPROVAL_TOKEN }}
 
             echo "Value: ${{ vars.APPROVAL_TOKEN }}"
