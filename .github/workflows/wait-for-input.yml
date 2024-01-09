@@ -22,7 +22,7 @@ jobs:
             echo "Trying..."
             approved=${{ secrets.APPROVAL_SECRET }}
             
-            if [[ -n "${approved}" ]]; then
+            if [[ "${approved}" != "0" ]]; then
               break
             fi
 
