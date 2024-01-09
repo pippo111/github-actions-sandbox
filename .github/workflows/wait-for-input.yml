@@ -22,6 +22,8 @@ jobs:
           while true; do
             echo "Trying..."
             approved=${{ vars.APPROVAL_TOKEN }}
+
+            echo "Value: ${{ vars.APPROVAL_TOKEN }}"
             
             if [[ "${approved}" != "0" ]]; then
               break
