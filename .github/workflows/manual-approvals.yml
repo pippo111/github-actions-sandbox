@@ -1,0 +1,33 @@
+name: Manual approval test
+run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+on:
+  push:
+    branches: [main]
+    paths:
+      - src/**
+jobs:
+  inital-information:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print out some info
+        run: |
+          echo "The job was manually triggered by a ${{ github.event_name }} event."
+          echo "This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+          echo "The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+
+  manual-approval:
+    environment: 'production'
+    runs-on: ubuntu-latest
+    needs:
+      - inital-information
+    steps:
+      - run: echo "Approved to environment"
+
+  last-job:
+    runs-on: ubuntu-latest
+    needs: 
+      - manual-approval
+    steps:
+      - name: Print out info after approval
+        run: |
+          echo "Final message."
