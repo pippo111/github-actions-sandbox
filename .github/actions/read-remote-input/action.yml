@@ -40,4 +40,4 @@ runs:
         done
         
         echo "Token value: ${token}"
-        echo "token=666" >> $GITHUB_OUTPUT
+        echo "token=$token" >> $GITHUB_OUTPUT
