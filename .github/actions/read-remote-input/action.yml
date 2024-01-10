@@ -7,12 +7,14 @@ inputs:
     type: number
 outputs:
    token:
-     description: "Received token"
+      value: ${{ steps.wait-for-token-step.outputs.token }}
+      description: "Received token"
 
 runs:
   using: "composite"
   steps:
     - name: Wait for the token to proceed
+      id: wait-for-token-step
       shell: bash
       run: |
         trials=0
