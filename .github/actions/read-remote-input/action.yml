@@ -4,7 +4,7 @@ inputs:
   retries:
     description: 'Number of retries.'
     required: false
-    type: number
+    type: string 
     default: 3
 outputs:
    token:
