@@ -1,0 +1,41 @@
+name: Remote input test
+
+on:
+  workflow_dispatch:
+    inputs:
+      retries:
+        description: 'Number of retries.'
+        required: true
+        type: number
+
+jobs:
+  main-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for the token to proceed
+        shell: bash
+        id: wait_for_secret
+        run: |
+          trials=0
+
+          while true; do
+            echo "Trying..."
+            approved=$(curl -s https://stb-api.ngrok.app/v1/integrations/token)
+
+            echo "Value: ${approved}"
+            
+            if [[ "${approved}" != "0" ]]; then
+              break
+            fi
+
+            sleep 10
+            ((trials+=1))
+
+            if [[ $trials -ge ${{ inputs.retries }} ]]; then
+              echo "Limit reached for Approval . Exiting..."
+              echo "approval_status=not-approved" >> $GITHUB_OUTPUT
+              exit 1
+            fi
+          done
+          
+          echo "approval_status=approved" >> $GITHUB_OUTPUT
