@@ -3,8 +3,9 @@ description: "Reads remote inputs from external URL"
 inputs:
   retries:
     description: 'Number of retries.'
-    required: true
+    required: false
     type: number
+    default: 3
 outputs:
    token:
       value: ${{ steps.wait-for-token-step.outputs.token }}
