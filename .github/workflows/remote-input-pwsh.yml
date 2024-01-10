@@ -1,4 +1,4 @@
-name: Remote input test
+name: Remote input test in poweshell
 
 on:
   workflow_dispatch:
