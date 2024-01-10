@@ -1,4 +1,4 @@
-name: User input test
+name: Wait for input
 
 on:
   workflow_dispatch:
@@ -12,6 +12,9 @@ jobs:
   main-job:
     runs-on: windows-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.1.0
+        
       - name: Print out some info
         run: |
           echo "The job was manually triggered by a ${{ github.event_name }} event."
