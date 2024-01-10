@@ -10,34 +10,18 @@ on:
 
 jobs:
   main-job:
-    environment: 'production'
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
-      - name: Wait for the secret to proceed
-        shell: bash
-        id: wait_for_secret
+      - name: Print out some info
         run: |
-          trials=0
+          echo "The job was manually triggered by a ${{ github.event_name }} event."
+          echo "This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+          echo "The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
 
-          while true; do
-            echo "Trying..."
-            # Won't work, because vars are read at the beginning and changing them later on will not affect current var
-            approved=${{ vars.APPROVAL_TOKEN }}
+      - name: Wait for the token
+        uses: ./.github/actions/read-remote-input
 
-            echo "Value: ${{ vars.APPROVAL_TOKEN }}"
-            
-            if [[ "${approved}" != "0" ]]; then
-              break
-            fi
-
-            sleep 10
-            ((trials+=1))
-
-            if [[ $trials -ge ${{ inputs.retries }} ]]; then
-              echo "Limit reached for Approval . Exiting..."
-              echo "approval_status=not-approved" >> $GITHUB_OUTPUT
-              exit 1
-            fi
-          done
+      - name: Print out received token
+        run: |
+          echo "Token received: ${{ steps.read-remote-input.outputs.token }}."
           
-          echo "approval_status=approved" >> $GITHUB_OUTPUT
