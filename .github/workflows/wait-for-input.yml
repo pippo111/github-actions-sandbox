@@ -20,6 +20,8 @@ jobs:
 
       - name: Wait for the token
         uses: ./.github/actions/read-remote-input
+        with:
+          retries: ${{ inputs.retries }}
 
       - name: Print out received token
         run: |
