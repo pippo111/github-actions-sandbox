@@ -1,0 +1,16 @@
+name: Workflow branch test
+run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+on:
+  workflow_dispatch:
+    inputs:
+      custom-input:
+        description: 'Test input.'
+        required: false
+        default: 'test'
+        type: string
+
+jobs:
+  branch-test:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Hello from main branch"
