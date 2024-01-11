@@ -13,4 +13,4 @@ jobs:
   branch-test:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Hello from main branch"
+      - run: echo "Hello from test branch"
