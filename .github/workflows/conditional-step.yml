@@ -18,6 +18,17 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Run conditional step
-        if: contains(github.event.head_commit.message, 'app/')
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            appdir:
+              - 'src/app/**'
+
+      - name: Run conditional step if changed
+        if: steps.filter.outputs.appdir == 'true'
         run: echo "Files in app/ have changed."
+
+      - name: Run conditional step if NOT changed
+        if: steps.filter.outputs.appdir != 'true'
+        run: echo "Files in app/ have NOT changed."
