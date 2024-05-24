@@ -1,4 +1,4 @@
-name: Client Deploy
+name: Docker run
 
 on:
   workflow_dispatch:
@@ -15,7 +15,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: Client Deploy @ ${{github.ref}}
+  group: Docker run @ ${{github.ref}}
   cancel-in-progress: true
   
 jobs:
