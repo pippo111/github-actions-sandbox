@@ -26,6 +26,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4.1.0
 
+      # - name: Test
+      #   run: |
+      #     echo ${{github.workspace}}
+      #     ls -al
+      #     cd ${{github.workspace}}
+      #     ${{github.workspace}}/src/app/run.sh
+
       - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@v2
 
@@ -44,5 +51,12 @@ jobs:
         uses: addnab/docker-run-action@v3
         with:
           image: fpwd/emscripten-opencv-release
-          options: -v /src/app/run.sh:/run.sh
-          run: echo "hello world"
+          options:
+            -v ${{github.workspace}}/src/app:/app
+            -v ${{github.workspace}}/app/out:/out 
+          run: /app/run.sh
+
+      - name: Test
+        run: |
+          echo "checking..."
+          cat ${{github.workspace}}/app/out/filename.txt
