@@ -22,13 +22,16 @@ jobs:
         id: filter
         with:
           filters: |
-            appdir:
+            app:
               - 'src/app/**'
 
       - name: Run conditional step if changed
-        if: steps.filter.outputs.appdir == 'true'
-        run: echo "Files in app/ have changed."
+        if: steps.filter.outputs.app == 'true'
+        run: |
+          echo ${{steps.filter.outputs.changes}}
+          echo ${{steps.filter.outputs.app_files}}
+          echo "Files in app/ have changed."
 
       - name: Run conditional step if NOT changed
-        if: steps.filter.outputs.appdir != 'true'
+        if: steps.filter.outputs.app != 'true'
         run: echo "Files in app/ have NOT changed."
