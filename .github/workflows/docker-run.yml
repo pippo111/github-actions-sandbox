@@ -1,0 +1,48 @@
+name: Client Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Desired environment to deploy to.'
+        required: true
+        type: choice
+        options:
+          - demo
+
+permissions:
+  id-token: write
+  contents: read
+
+concurrency:
+  group: Client Deploy @ ${{github.ref}}
+  cancel-in-progress: true
+  
+jobs:
+  deploy-client-app:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.1.0
+
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build Docker Image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: src/docker/Dockerfile
+          tags: fpwd/emscripten-opencv-release
+          load: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          push: false
+
+      - name: Build WASM
+        uses: addnab/docker-run-action@v3
+        with:
+          image: fpwd/emscripten-opencv-release
+          options: -v /src/app/run.sh:/run.sh
+          run: echo "hello world"
