@@ -8,6 +8,12 @@ runs:
   using: "composite"
   steps:
     - uses: actions/checkout@v4
+      if: github.event_name == 'pull_request'
+      with:
+        ref: ${{ github.event.pull_request.head.ref }}
+
+    - uses: actions/checkout@v4
+      if: github.event_name == 'push'
 
     - name: Save custom token to a file
       shell: bash
