@@ -18,8 +18,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        if: github.event_name == 'pull_request'
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - uses: actions/checkout@v4
+        if: github.event_name != 'pull_request'
 
       - run: echo "The ${{ github.repository }} repository has been cloned to the runner."
 
@@ -29,6 +34,16 @@ jobs:
           echo ${{ github.event_name }}
           echo ${{ inputs.with-commit || github.event_name == 'pull_request' }}
 
-      - uses: ./.github/actions/create-file
-        with:
-          with-commit: ${{ inputs.with-commit || github.event_name == 'pull_request' }}
+      - name: Create a file action
+        uses: ./.github/actions/create-file
+
+      - name: Commiting the file
+        if: ${{ inputs.with-commit || github.event_name == 'pull_request' }}
+        shell: bash
+        run: |
+          echo "Commiting the file..."
+          git config user.name "github-actions[bot]"
+          git config user.email "stb+github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "feat(client): [github-actions-bot] Include compiled WASM files"
+          git push

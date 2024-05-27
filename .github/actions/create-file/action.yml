@@ -1,20 +1,9 @@
 name: "Creates a file"
 description: "Creates a file and commits into the repository"
-inputs:
-  with-commit:
-    required: false
-    description: "Create a commit with the output"
+
 runs:
   using: "composite"
   steps:
-    - uses: actions/checkout@v4
-      if: github.event_name == 'pull_request'
-      with:
-        ref: ${{ github.event.pull_request.head.ref }}
-
-    - uses: actions/checkout@v4
-      if: github.event_name == 'push'
-
     - name: Save custom token to a file
       shell: bash
       run: |
@@ -26,14 +15,3 @@ runs:
       run: |
         echo "Reading the file..."
         cat ./src/out/filename.txt
-
-    - name: Commiting the file
-      if: ${{ inputs.with-commit == 'true' }}
-      shell: bash
-      run: |
-        echo "Commiting the file..."
-        git config user.name "github-actions[bot]"
-        git config user.email "stb+github-actions[bot]@users.noreply.github.com"
-        git add .
-        git commit -m "feat(client): [github-actions-bot] Include compiled WASM files"
-        git push
