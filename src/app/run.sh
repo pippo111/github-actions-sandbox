@@ -1,2 +1,2 @@
-echo "hello from test script file"  > filename.txt
+date >> filename.txt
 cp filename.txt ../out/filename.txt

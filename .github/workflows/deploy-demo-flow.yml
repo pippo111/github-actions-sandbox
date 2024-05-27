@@ -1,0 +1,28 @@
+name: Deploy Demo
+
+on:
+  workflow_dispatch:
+    inputs:
+      with-commit:
+        description: 'If true, commit the file'
+        default: false
+        type: boolean
+
+jobs:
+  deploy-demo:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - run: echo "The ${{ github.repository }} repository has been cloned to the runner."
+
+      - uses: ./.github/actions/create-file
+        with:
+          with-commit: ${{ inputs.with-commit }}
+
+      - name: Checking the file
+        shell: bash
+        run: cat ./src/out/filename.txt
+          

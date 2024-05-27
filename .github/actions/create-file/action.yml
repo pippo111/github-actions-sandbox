@@ -1,0 +1,33 @@
+name: "Creates a file"
+description: "Creates a file and commits into the repository"
+inputs:
+  with-commit:
+    required: false
+    description: "If true then create auto-commit with the file"
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v4
+
+    - name: Save custom token to a file
+      shell: bash
+      run: |
+        date >> filename.txt
+        mv filename.txt ./src/out/filename.txt
+
+    - name: Read the file
+      shell: bash
+      run: |
+        echo "Reading the file..."
+        cat ./src/out/filename.txt
+
+    - name: Commiting the file
+      if: ${{ inputs.with-commit == 'true' }}
+      shell: bash
+      run: |
+        echo "Commiting the file..."
+        git config user.name "github-actions[bot]"
+        git config user.email "stb+github-actions[bot]@users.noreply.github.com"
+        git add .
+        git commit -m "feat(client): [github-actions-bot] Include compiled WASM files"
+        git push
