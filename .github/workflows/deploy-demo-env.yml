@@ -21,12 +21,16 @@ jobs:
 
       - uses: ./.github/actions/setup-environment-names
         id: setup-env
+        shell: bash
         with:
           environment: ${{ inputs.environment }}
+        run: |
+          echo "ENVIRONMENT_UPPERCASE=${steps.setup-env.outputs.environment-uppercase}" >> ${GITHUB_ENV}
 
       - name: Checking setup env
         shell: bash
         run: |
           echo ${{ steps.setup-env.outputs.environment }}
           echo ${{ steps.setup-env.outputs.environment-uppercase }}
+          echo ${{ env.ENVIRONMENT_UPPERCASE }}
           
