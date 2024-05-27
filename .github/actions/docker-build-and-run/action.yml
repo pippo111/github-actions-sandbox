@@ -24,11 +24,11 @@ runs:
         image: fpwd/emscripten-opencv-release
         options:
           -v ${{github.workspace}}/src/app:/app
-          -v ${{github.workspace}}/app/out:/out 
+          -v ${{github.workspace}}/src/app/out:/out 
         run: /app/run.sh
 
     - name: Test
       shell: bash
       run: |
         echo "checking..."
-        cat ${{github.workspace}}/app/out/filename.txt
+        cat ${{github.workspace}}/src/app/out/filename.txt
