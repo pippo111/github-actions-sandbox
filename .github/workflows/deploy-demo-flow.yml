@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       with-commit:
-        description: 'If true, commit the file'
+        description: "Create a commit with the output"
         default: false
         type: boolean
 

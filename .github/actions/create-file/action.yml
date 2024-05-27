@@ -3,7 +3,7 @@ description: "Creates a file and commits into the repository"
 inputs:
   with-commit:
     required: false
-    description: "If true then create auto-commit with the file"
+    description: "Create a commit with the output"
 runs:
   using: "composite"
   steps:
