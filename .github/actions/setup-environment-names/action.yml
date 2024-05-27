@@ -1,0 +1,43 @@
+name: "Setup environment names"
+description: "Determine environment based on branch name put it to env variable"
+inputs:
+  environment:
+    required: true
+    description: "Desired environment to deploy to."
+outputs:
+  environment:
+    value: ${{ steps.determine-env.outputs.ENVIRONMENT }}
+  environment-uppercase:
+    value: ${{ steps.env-to-uppercase.outputs.ENVIRONMENT_UPPERCASE }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Determine environment based on branch name
+      if: ${{ inputs.environment == '' }}
+      shell: pwsh
+      run: |
+        $ref = "${{ github.ref }}"
+        switch ($ref) {
+          "refs/heads/master" { Write-Output ('ENVIRONMENT=production') >> $env:GITHUB_OUTPUT; break;}
+          "refs/heads/staging" { Write-Output ('ENVIRONMENT=staging') >> $env:GITHUB_OUTPUT; break;}
+          "refs/heads/develop" { Write-Output ('ENVIRONMENT=development') >> $env:GITHUB_OUTPUT; break;}
+          default { Write-Error "Cannot build automatic release from branch: $ref"}
+        }
+
+    - name: Input environment to ENV
+      id: determine-env
+      if: ${{ inputs.environment != '' }}
+      shell: bash
+      env:
+        ENVIRONMENT: ${{ inputs.environment }}
+      run: |
+        echo "ENVIRONMENT=${ENVIRONMENT}" >>${GITHUB_OUTPUT}
+
+    - name: Environment to uppercase
+      id: env-to-uppercase
+      shell: bash
+      env:
+        ENVIRONMENT: ${{ inputs.environment }}
+      run: |
+        echo "ENVIRONMENT_UPPERCASE=${ENVIRONMENT^^}" >>${GITHUB_OUTPUT}

@@ -1,0 +1,32 @@
+name: Deploy Demo Env
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Desired environment to deploy to.'
+        required: true
+        type: choice
+        options:
+          - demo
+          - development
+
+jobs:
+  deploy-demo:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - uses: ./.github/actions/setup-environment-names
+        id: setup-env
+        with:
+          environment: ${{ inputs.environment }}
+
+      - name: Checking setup env
+        shell: bash
+        run: |
+          echo ${{ steps.setup-env.outputs.environment }}
+          echo ${{ steps.setup-env.outputs.environment-uppercase }}
+          
