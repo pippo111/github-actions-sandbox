@@ -22,6 +22,7 @@ runs:
           "refs/heads/master" { Write-Output ('ENVIRONMENT=production') >> $env:GITHUB_OUTPUT; break;}
           "refs/heads/staging" { Write-Output ('ENVIRONMENT=staging') >> $env:GITHUB_OUTPUT; break;}
           "refs/heads/develop" { Write-Output ('ENVIRONMENT=development') >> $env:GITHUB_OUTPUT; break;}
+          "refs/heads/main" { Write-Output ('ENVIRONMENT=main') >> $env:GITHUB_OUTPUT; break;}
           default { Write-Error "Cannot build automatic release from branch: $ref"}
         }
 
